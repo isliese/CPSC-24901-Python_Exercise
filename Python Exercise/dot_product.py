@@ -11,6 +11,7 @@ def dot_product_manual(a, b):
         result += a[i] * b[i]
     return result
 
+
 # 1. Load the data from L1.csv and Q1.csv and save them in python array
 L1_python_array = data_loader.csv_file_loader("L1.csv")
 Q1_python_array = data_loader.csv_file_loader("Q1.csv")
@@ -34,8 +35,8 @@ L1_numpy_array = np.array(data_loader.csv_file_loader("L1.csv"), dtype=float)
 Q1_numpy_array = np.array(data_loader.csv_file_loader("Q1.csv"), dtype=float)
 
 # Loads the 𝑥 values from “L1.csv” and from “Q1.csv”
-L1_numpy_x = [float(row[0]) for row in L1_numpy_array]
-Q1_numpy_x = [float(row[0]) for row in Q1_numpy_array]
+L1_numpy_x = L1_numpy_array[:, 0]
+Q1_numpy_x = Q1_numpy_array[:, 0]
 
 # Calculate how long did it take while processing element-wise multiplication in numpy arrays
 start_time = time.time()
@@ -47,11 +48,11 @@ print("Execution Time while processing element-wise multiplicaition of numpy arr
 print("-----------------------------------------")
 
 
-# Load the data from Q2.csv and save them in python array and numpy array
+# 3. Load the data from Q2.csv and save them in python array and numpy array
 Q2_python_array = data_loader.csv_file_loader("Q2.csv")
 Q2_numpy_array = np.array(data_loader.csv_file_loader("Q2.csv"), dtype=float)
 
-# 3. Calculate how long did it take while processing matrix multiplication in python arrays
+# Calculate how long did it take while processing matrix multiplication in python arrays
 python_start_time = time.time()
 Q2_python_array = [[float(value) for value in row] for row in Q2_python_array] # All values in Q2_python_array are transformed to float type
 matrix_multi_result = [
@@ -64,10 +65,11 @@ python_end_time = time.time()
 print("Execution Time while processing matrix multiplicaition of python arrays in Q2.csv: {:.4f} seconds".format(python_end_time - python_start_time))
 print("-----------------------------------------")
 
+
 # 4. Calculate how long did it take while processing matrix multiplication in numpy arrays
 numpy_start_time = time.time()
 try:
-    matrix_multi_result = np.dot(Q2_numpy_array, Q2_numpy_array.T)
+    matrix_multi_result = np.einsum("ij,ij->i", Q2_numpy_array, Q2_numpy_array)
 except: 
     print(f"Unable to allocate memory for the matrix multiplication: numpy.core._exceptions._ArrayMemoryError")
     print("It takes up too much space like 7.28 TiB when you calculate matrix multiplication in large arrays.\n")
